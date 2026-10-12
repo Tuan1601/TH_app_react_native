@@ -5,10 +5,23 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { Student } from '../../types';
 import Badge, { getBadgeType } from './Badge';
 import AppIcon from './AppIcon';
 import { COLORS, RADIUS, SPACING, FONTS, SHADOWS } from '../../theme';
+
+interface Student {
+  id: string;
+  maSV: string;
+  hoTen: string;
+  ngaySinh: string;
+  gioiTinh: 'Nam' | 'Nữ';
+  email: string;
+  soDienThoai: string;
+  lop: string;
+  khoa: string;
+  gpa: number;
+  xepLoai: string;
+}
 
 interface StudentCardProps {
   student: Student;
@@ -28,7 +41,7 @@ const getAvatarColor = (xepLoai: string): string => {
 const StudentCard: React.FC<StudentCardProps> = ({ student, onPress }) => {
   const initials = student.hoTen
     .split(' ')
-    .map(w => w[0])
+    .map((w: string) => w[0])
     .slice(-2)
     .join('')
     .toUpperCase();
