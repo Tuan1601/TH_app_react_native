@@ -4,6 +4,7 @@ import {
   FlatList,
   RefreshControl,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -19,7 +20,9 @@ import InlineError from '../../components/common/InlineError';
 import AppButton from '../../components/common/AppButton';
 import AssignmentItem from '../../components/assignment/AssignmentItem';
 import { isOverdue } from '../../utils/date';
+import colors from '../../theme/colors';
 import spacing from '../../theme/spacing';
+import typography from '../../theme/typography';
 import type { Assignment } from '../../types/models';
 
 const FILTERS = [
@@ -111,6 +114,8 @@ export default function AssignmentListScreen({ navigation }: Props) {
         )}
         ListHeaderComponent={
           <View style={styles.header}>
+            <Text style={styles.title}>Bài tập</Text>
+            <Text style={styles.subtitle}>Theo dõi tiến độ và hạn nộp của bạn</Text>
             <InlineError
               message={status.assignments.error?.message}
               onRetry={() => refresh('assignments')}
@@ -149,7 +154,17 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xl,
   },
   header: {
-    marginBottom: spacing.xs,
+    marginBottom: spacing.sm,
+  },
+  title: {
+    ...typography.h1,
+    color: colors.text,
+    marginBottom: spacing.xxs,
+  },
+  subtitle: {
+    ...typography.caption,
+    color: colors.textMuted,
+    marginBottom: spacing.lg,
   },
   addButton: {
     marginBottom: spacing.md,

@@ -41,6 +41,20 @@ export default function AppNavigator() {
           headerShown: false,
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.textMuted,
+          tabBarStyle: {
+            height: 70,
+            paddingTop: 8,
+            paddingBottom: 8,
+            backgroundColor: colors.surface,
+            borderTopColor: colors.border,
+            borderTopWidth: 1,
+            elevation: 12,
+          },
+          tabBarLabelStyle: {
+            fontSize: 10,
+            fontWeight: '600',
+            marginTop: 2,
+          },
           tabBarIcon: ({ color, size }) => renderTabBarIcon(route.name, color, size),
         })}>
         <Tab.Screen

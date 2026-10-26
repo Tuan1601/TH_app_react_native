@@ -3,12 +3,12 @@
     {
       "id": 1,
       "studentCode": "B23DCCC171",
-      "fullName": "Nguyễn Anh Tuấn",
+      "fullName": "Nguyễn Anh Tuấn9",
       "className": "D23CNPM02",
       "major": "Công nghệ thông tin định hướng ứng dụng",
       "email": "tuan.naB23cc171@ptit.edu.vn",
-      "phone": "0912345678",
-      "updatedAt": "2026-10-20T08:00:00Z"
+      "phone": "0912345425",
+      "updatedAt": "2026-10-26T09:27:57.535Z"
     },
     {
       "id": 2,
@@ -197,7 +197,7 @@
       "description": "",
       "dueDate": "2026-11-02T16:59:00.000Z",
       "status": "todo",
-      "updatedAt": "2026-10-26T08:16:16.258Z",
+      "updatedAt": "2026-10-26T08:27:25.302Z",
       "id": 6
     }
   ],

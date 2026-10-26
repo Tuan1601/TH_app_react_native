@@ -316,19 +316,39 @@ export function AppDataProvider({ children }: PropsWithChildren) {
         return { queued: true };
       }
 
-      await runOptimistic(
-        {
-          id: `inflight-student-${Date.now()}`,
+      try {
+        await runOptimistic(
+          {
+            id: `inflight-student-${Date.now()}`,
+            method: 'PATCH',
+            url,
+            body,
+            createdAt: updatedAt,
+            meta: { entity: 'student', entityId: CURRENT_STUDENT_ID },
+          },
+          () => studentService.update(CURRENT_STUDENT_ID, body),
+          updated =>
+            studentQuery.mutate(
+              prev => (prev ? { ...prev, ...updated } : (updated as Student)),
+              true,
+            ),
+        );
+        return { queued: false };
+      } catch {
+        await outbox.enqueue({
           method: 'PATCH',
           url,
           body,
-          createdAt: updatedAt,
-          meta: { entity: 'student', entityId: CURRENT_STUDENT_ID },
-        },
-        () => studentService.update(CURRENT_STUDENT_ID, body),
-        updated => studentQuery.mutate(updated, true),
-      );
-      return { queued: false };
+          meta: {
+            entity: 'student',
+            entityId: CURRENT_STUDENT_ID,
+            baseUpdatedAt: studentQuery.data?.updatedAt,
+            label: 'Thông tin cá nhân',
+          },
+        });
+        await reloadPending();
+        return { queued: true };
+      }
     },
     [reloadPending, runOptimistic, studentQuery],
   );

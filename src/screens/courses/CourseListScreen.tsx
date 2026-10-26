@@ -84,6 +84,8 @@ export default function CourseListScreen({ navigation }: Props) {
         )}
         ListHeaderComponent={
           <View style={styles.header}>
+            <Text style={styles.title}>Môn học</Text>
+            <Text style={styles.subtitle}>Quản lý các học phần trong học kỳ</Text>
             <Text style={styles.count}>{(courses || []).length} môn học</Text>
             <InlineError
               message={status.courses.error?.message}
@@ -123,11 +125,21 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xl,
   },
   header: {
-    marginBottom: spacing.xs,
+    marginBottom: spacing.sm,
+  },
+  title: {
+    ...typography.h1,
+    color: colors.text,
+    marginBottom: spacing.xxs,
+  },
+  subtitle: {
+    ...typography.caption,
+    color: colors.textMuted,
+    marginBottom: spacing.lg,
   },
   count: {
     ...typography.captionBold,
-    color: colors.textMuted,
+    color: colors.primary,
     marginBottom: spacing.sm,
   },
 });

@@ -26,8 +26,10 @@ export default function ScreenContainer({
       <OfflineBanner />
       {scroll ? (
         <ScrollView
-          contentContainerStyle={[styles.content, contentStyle]}
-          keyboardShouldPersistTaps="handled">
+          style={styles.scroll}
+          contentContainerStyle={[styles.scrollContent, contentStyle]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}>
           {children}
         </ScrollView>
       ) : (
@@ -41,6 +43,14 @@ const styles = StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    padding: spacing.lg,
+    paddingBottom: spacing.xxl,
   },
   content: {
     flex: 1,

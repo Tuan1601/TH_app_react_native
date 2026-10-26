@@ -72,6 +72,8 @@ export default function ScheduleScreen({ navigation }: Props) {
         )}
         ListHeaderComponent={
           <View style={styles.header}>
+            <Text style={styles.title}>Thời khóa biểu</Text>
+            <Text style={styles.subtitle}>Lịch học của bạn theo từng ngày</Text>
             <InlineError
               message={status.sessions.error?.message}
               onRetry={() => refresh('sessions')}
@@ -105,7 +107,17 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xl,
   },
   header: {
-    marginBottom: spacing.xs,
+    marginBottom: spacing.sm,
+  },
+  title: {
+    ...typography.h1,
+    color: colors.text,
+    marginBottom: spacing.xxs,
+  },
+  subtitle: {
+    ...typography.caption,
+    color: colors.textMuted,
+    marginBottom: spacing.lg,
   },
   sectionTitle: {
     ...typography.h3,

@@ -53,17 +53,24 @@ export default function AppButton({
 const styles = StyleSheet.create({
   button: {
     minHeight: sizes.touch,
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
+    shadowColor: colors.primaryDark,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 3,
   },
   outline: {
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.primary,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   disabled: {
     opacity: 0.55,

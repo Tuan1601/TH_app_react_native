@@ -48,7 +48,8 @@ export function validateProfile(values: ProfileFormValues): FormErrors<ProfileFo
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
     errors.email = 'Email không hợp lệ.';
   }
-  if (!/^0\d{9,10}$/.test(values.phone.trim())) {
+  const cleanPhone = values.phone.trim().replace(/[\s.-]/g, '');
+  if (!/^0\d{9,10}$/.test(cleanPhone)) {
     errors.phone = 'Số điện thoại gồm 10–11 chữ số, bắt đầu bằng 0.';
   }
   return errors;

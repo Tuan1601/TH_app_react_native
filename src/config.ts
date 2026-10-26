@@ -9,8 +9,7 @@ import { Platform } from 'react-native';
  */
 const LAN_URL = ''; // ví dụ: 'http://192.168.1.10:3000'
 
-export const BASE_URL =
-  LAN_URL || (Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000');
+export const BASE_URL = LAN_URL || 'http://127.0.0.1:3000';
 
 /** Timeout cho mỗi request (ms). */
 export const TIMEOUT = 10000;
