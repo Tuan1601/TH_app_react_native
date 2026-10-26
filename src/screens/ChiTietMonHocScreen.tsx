@@ -25,7 +25,6 @@ const ChiTietMonHocScreen: React.FC<Props> = ({ route, navigation }) => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* Hero Header */}
       <View style={[styles.hero, { backgroundColor: monHoc.mauSac }]}>
         <TouchableOpacity
           style={styles.backBtn}
@@ -56,7 +55,7 @@ const ChiTietMonHocScreen: React.FC<Props> = ({ route, navigation }) => {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* Thông tin chung */}
+
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Thông tin môn học</Text>
           <View style={styles.card}>
@@ -68,7 +67,6 @@ const ChiTietMonHocScreen: React.FC<Props> = ({ route, navigation }) => {
           </View>
         </View>
 
-        {/* Mô tả */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Mô tả môn học</Text>
           <View style={styles.card}>
@@ -76,7 +74,7 @@ const ChiTietMonHocScreen: React.FC<Props> = ({ route, navigation }) => {
           </View>
         </View>
 
-        {/* Bài tập của môn */}
+
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Bài tập ({baiTapMonNay.length})</Text>

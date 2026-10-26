@@ -2,7 +2,22 @@
 // TYPES - Ứng dụng Quản Lý Học Tập Sinh Viên
 // ============================================================
 
+export * from './models';
+
 // --- Sinh Viên ---
+export interface Student {
+  id: string;
+  maSV: string;
+  hoTen: string;
+  ngaySinh: string;
+  gioiTinh: 'Nam' | 'Nữ';
+  email: string;
+  soDienThoai: string;
+  lop: string;
+  khoa: string;
+  gpa: number;
+  xepLoai?: string;
+}
 export interface SinhVien {
   maSV: string;
   hoTen: string;
