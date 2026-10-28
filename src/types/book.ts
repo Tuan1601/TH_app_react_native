@@ -15,9 +15,16 @@ export type Book = {
   year: number;
   quantity: number;
   borrowed: number;
+  loans: BookLoan[];
 };
 
-export type BookInput = Omit<Book, 'id' | 'borrowed'>;
+export type BookLoan = {
+  id: string;
+  borrowerName: string;
+  borrowedAt: string;
+};
+
+export type BookInput = Pick<Book, 'title' | 'author' | 'category' | 'year' | 'quantity'>;
 
 export type BookFormValues = {
   title: string;

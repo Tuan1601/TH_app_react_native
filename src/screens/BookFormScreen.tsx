@@ -14,6 +14,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import AppButton from '../components/AppButton';
+import BottomNavigation from '../components/BottomNavigation';
 import {useBooks} from '../context/BookContext';
 import {RootStackParamList} from '../navigation/types';
 import {BookCategory, BookFormValues, BookInput, bookCategories} from '../types/book';
@@ -159,12 +160,15 @@ export default function BookFormScreen({navigation, route}: Props): React.JSX.El
   if (bookId && !currentBook) {
     return (
       <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right', 'bottom']}>
-        <View style={styles.missingBook}>
-          <MaterialCommunityIcons name="book-alert-outline" size={42} color={colors.textSecondary} />
-          <Text style={styles.missingTitle}>Không tìm thấy sách</Text>
-          <Text style={styles.missingMessage}>Sách có thể đã bị xóa khỏi thư viện.</Text>
-          <AppButton title="Quay lại" icon="arrow-left" variant="outline" onPress={navigation.goBack} />
+        <View style={styles.flex}>
+          <View style={styles.missingBook}>
+            <MaterialCommunityIcons name="book-alert-outline" size={42} color={colors.textSecondary} />
+            <Text style={styles.missingTitle}>Không tìm thấy sách</Text>
+            <Text style={styles.missingMessage}>Sách có thể đã bị xóa khỏi thư viện.</Text>
+            <AppButton title="Quay lại" icon="arrow-left" variant="outline" onPress={navigation.goBack} />
+          </View>
         </View>
+        <BottomNavigation navigation={navigation} activeTab="BookForm" />
       </SafeAreaView>
     );
   }
@@ -175,6 +179,7 @@ export default function BookFormScreen({navigation, route}: Props): React.JSX.El
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView
+          style={styles.flex}
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}>
@@ -304,6 +309,7 @@ export default function BookFormScreen({navigation, route}: Props): React.JSX.El
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <BottomNavigation navigation={navigation} activeTab="BookForm" />
     </SafeAreaView>
   );
 }

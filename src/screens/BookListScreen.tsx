@@ -14,6 +14,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import AppButton from '../components/AppButton';
 import BookCard from '../components/BookCard';
+import BottomNavigation from '../components/BottomNavigation';
 import EmptyState from '../components/EmptyState';
 import {useBooks} from '../context/BookContext';
 import {RootStackParamList} from '../navigation/types';
@@ -85,6 +86,7 @@ export default function BookListScreen({navigation}: Props): React.JSX.Element {
         book={item}
         onPress={() => navigation.navigate('BookDetail', {bookId: item.id})}
         onLongPress={() => confirmDelete(item)}
+        onDelete={() => confirmDelete(item)}
       />
     ),
     [confirmDelete, navigation],
@@ -201,18 +203,21 @@ export default function BookListScreen({navigation}: Props): React.JSX.Element {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right', 'bottom']}>
-      <FlatList
-        data={filteredBooks}
-        renderItem={renderBook}
-        keyExtractor={book => book.id}
-        ListHeaderComponent={listHeader}
-        ListEmptyComponent={<EmptyState searching={books.length > 0} />}
-        contentContainerStyle={styles.listContent}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-        initialNumToRender={8}
-        windowSize={7}
-      />
+      <View style={styles.flex}>
+        <FlatList
+          data={filteredBooks}
+          renderItem={renderBook}
+          keyExtractor={book => book.id}
+          ListHeaderComponent={listHeader}
+          ListEmptyComponent={<EmptyState searching={books.length > 0} />}
+          contentContainerStyle={styles.listContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          initialNumToRender={8}
+          windowSize={7}
+        />
+      </View>
+      <BottomNavigation navigation={navigation} activeTab="BookList" />
     </SafeAreaView>
   );
 }
@@ -240,6 +245,9 @@ function StatCard({icon, label, value, tint}: StatCardProps): React.JSX.Element 
 }
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   safeArea: {
     flex: 1,
     backgroundColor: colors.background,

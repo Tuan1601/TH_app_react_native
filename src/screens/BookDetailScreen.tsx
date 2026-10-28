@@ -4,6 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import AppButton from '../components/AppButton';
+import BottomNavigation from '../components/BottomNavigation';
 import {useBooks} from '../context/BookContext';
 import {RootStackParamList} from '../navigation/types';
 import {colors, radius, shadows, spacing, typography} from '../theme';
@@ -19,48 +20,47 @@ const categoryColors: Record<Book['category'], string> = {
 };
 
 export default function BookDetailScreen({navigation, route}: Props): React.JSX.Element {
-  const {books, borrowBook, returnBook} = useBooks();
-  const [busyAction, setBusyAction] = useState<'borrow' | 'return' | null>(null);
+  const {books, returnBook} = useBooks();
+  const [busyLoanId, setBusyLoanId] = useState<string | null>(null);
   const busyActionRef = useRef(false);
   const book = useMemo(
     () => books.find(item => item.id === route.params.bookId),
     [books, route.params.bookId],
   );
 
-  const runAction = async (action: 'borrow' | 'return') => {
+  const handleReturn = async (loanId: string) => {
     if (!book || busyActionRef.current) {
       return;
     }
     busyActionRef.current = true;
-    setBusyAction(action);
+    setBusyLoanId(loanId);
     try {
-      if (action === 'borrow') {
-        await borrowBook(book.id);
-      } else {
-        await returnBook(book.id);
-      }
+      await returnBook(book.id, loanId);
     } catch (error) {
       Alert.alert(
         'Không thể cập nhật',
-        error instanceof Error ? error.message : 'Đã xảy ra lỗi khi cập nhật lượt mượn.',
+        error instanceof Error ? error.message : 'Đã xảy ra lỗi khi nhận trả sách.',
       );
     } finally {
       busyActionRef.current = false;
-      setBusyAction(null);
+      setBusyLoanId(null);
     }
   };
 
   if (!book) {
     return (
       <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right', 'bottom']}>
-        <View style={styles.missingBook}>
-          <MaterialCommunityIcons name="book-alert-outline" size={44} color={colors.textSecondary} />
-          <Text style={styles.missingTitle}>Sách không còn tồn tại</Text>
-          <Text style={styles.missingText}>
-            Danh sách đã thay đổi. Hãy quay lại để chọn một đầu sách khác.
-          </Text>
-          <AppButton title="Quay lại danh sách" icon="arrow-left" onPress={navigation.goBack} />
+        <View style={styles.flex}>
+          <View style={styles.missingBook}>
+            <MaterialCommunityIcons name="book-alert-outline" size={44} color={colors.textSecondary} />
+            <Text style={styles.missingTitle}>Sách không còn tồn tại</Text>
+            <Text style={styles.missingText}>
+              Danh sách đã thay đổi. Hãy quay lại để chọn một đầu sách khác.
+            </Text>
+            <AppButton title="Quay lại danh sách" icon="arrow-left" onPress={navigation.goBack} />
+          </View>
         </View>
+        <BottomNavigation navigation={navigation} activeTab="BookList" />
       </SafeAreaView>
     );
   }
@@ -71,6 +71,7 @@ export default function BookDetailScreen({navigation, route}: Props): React.JSX.
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right', 'bottom']}>
       <ScrollView
+        style={styles.flex}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.topBar}>
@@ -168,19 +169,16 @@ export default function BookDetailScreen({navigation, route}: Props): React.JSX.
                 title="Cho mượn"
                 icon="arrow-up-right"
                 variant="primary"
-                disabled={remaining === 0 || busyAction !== null}
-                loading={busyAction === 'borrow'}
-                onPress={() => runAction('borrow')}
+                disabled={remaining === 0}
+                onPress={() => navigation.navigate('Borrowing', {bookId: book.id})}
               />
             </View>
             <View style={styles.actionButton}>
               <AppButton
-                title="Nhận trả"
-                icon="arrow-down-left"
+                title="Xem người mượn"
+                icon="account-multiple-outline"
                 variant="outline"
-                disabled={book.borrowed === 0 || busyAction !== null}
-                loading={busyAction === 'return'}
-                onPress={() => runAction('return')}
+                onPress={() => navigation.navigate('Borrowing', {bookId: book.id})}
               />
             </View>
           </View>
@@ -192,6 +190,62 @@ export default function BookDetailScreen({navigation, route}: Props): React.JSX.
           ) : null}
         </View>
 
+        <View style={styles.borrowersHeading}>
+          <View>
+            <Text style={styles.sectionTitle}>Người đang mượn</Text>
+            <Text style={styles.actionSubtitle}>
+              {book.loans.length} lượt mượn của đầu sách này
+            </Text>
+          </View>
+          {book.loans.length > 0 ? (
+            <View style={styles.borrowerCount}>
+              <Text style={styles.borrowerCountText}>{book.loans.length}</Text>
+            </View>
+          ) : null}
+        </View>
+        {book.loans.length === 0 ? (
+          <View style={styles.noBorrowersCard}>
+            <MaterialCommunityIcons
+              name="account-check-outline"
+              size={22}
+              color={colors.textSecondary}
+            />
+            <Text style={styles.noBorrowersText}>Hiện chưa có ai mượn sách này.</Text>
+          </View>
+        ) : (
+          book.loans.map(loan => (
+            <View key={loan.id} style={styles.borrowerCard}>
+              <View style={styles.borrowerIcon}>
+                <MaterialCommunityIcons
+                  name="account-outline"
+                  size={19}
+                  color={colors.primary}
+                />
+              </View>
+              <View style={styles.borrowerCopy}>
+                <Text style={styles.borrowerName}>{loan.borrowerName}</Text>
+                <Text style={styles.borrowerDate}>Mượn ngày {loan.borrowedAt}</Text>
+              </View>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Nhận trả từ ${loan.borrowerName}`}
+                disabled={busyLoanId !== null}
+                onPress={() => handleReturn(loan.id)}
+                style={({pressed}) => [
+                  styles.returnButton,
+                  (pressed || busyLoanId === loan.id) && styles.pressed,
+                  busyLoanId !== null && styles.returnDisabled,
+                ]}>
+                {busyLoanId === loan.id ? (
+                  <Text style={styles.returnText}>Đang xử lý</Text>
+                ) : (
+                  <Text style={styles.returnText}>Nhận trả</Text>
+                )}
+              </Pressable>
+            </View>
+          ))
+        )}
+
         <View style={styles.infoCard}>
           <View style={styles.infoIcon}>
             <MaterialCommunityIcons name="information-outline" size={18} color={colors.primary} />
@@ -201,6 +255,7 @@ export default function BookDetailScreen({navigation, route}: Props): React.JSX.
           </Text>
         </View>
       </ScrollView>
+      <BottomNavigation navigation={navigation} activeTab="BookList" />
     </SafeAreaView>
   );
 }
@@ -223,6 +278,9 @@ function Metric({icon, label, value, tint}: MetricProps): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   safeArea: {
     flex: 1,
     backgroundColor: colors.background,
@@ -437,6 +495,86 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     flex: 1,
+  },
+  borrowersHeading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: spacing.xxl,
+    marginBottom: spacing.md,
+  },
+  borrowerCount: {
+    minWidth: 29,
+    height: 29,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.sm,
+    borderRadius: radius.pill,
+    backgroundColor: colors.surfaceMuted,
+  },
+  borrowerCountText: {
+    color: colors.primary,
+    fontSize: typography.caption,
+    fontWeight: '800',
+  },
+  borrowerCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+    borderRadius: radius.md,
+    backgroundColor: colors.surface,
+    ...shadows.card,
+  },
+  borrowerIcon: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radius.pill,
+    backgroundColor: colors.surfaceMuted,
+    marginRight: spacing.md,
+  },
+  borrowerCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  borrowerName: {
+    color: colors.neutral,
+    fontSize: typography.small,
+    fontWeight: '800',
+  },
+  borrowerDate: {
+    color: colors.textSecondary,
+    fontSize: typography.caption,
+    marginTop: 4,
+  },
+  returnButton: {
+    minHeight: 36,
+    justifyContent: 'center',
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.sm,
+    backgroundColor: colors.surfaceMuted,
+  },
+  returnDisabled: {
+    opacity: 0.6,
+  },
+  returnText: {
+    color: colors.primary,
+    fontSize: typography.caption,
+    fontWeight: '700',
+  },
+  noBorrowersCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    padding: spacing.lg,
+    borderRadius: radius.md,
+    backgroundColor: colors.surface,
+  },
+  noBorrowersText: {
+    color: colors.textSecondary,
+    fontSize: typography.small,
   },
   helperRow: {
     flexDirection: 'row',

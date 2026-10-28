@@ -5,6 +5,7 @@ import {useBooks} from '../context/BookContext';
 import BookDetailScreen from '../screens/BookDetailScreen';
 import BookFormScreen from '../screens/BookFormScreen';
 import BookListScreen from '../screens/BookListScreen';
+import BorrowingScreen from '../screens/BorrowingScreen';
 import {colors, radius, spacing, typography} from '../theme';
 import {RootStackParamList} from './types';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -57,6 +58,7 @@ export default function AppNavigator(): React.JSX.Element {
       <Stack.Screen name="BookList" component={BookListScreen} />
       <Stack.Screen name="BookForm" component={BookFormScreen} />
       <Stack.Screen name="BookDetail" component={BookDetailScreen} />
+      <Stack.Screen name="Borrowing" component={BorrowingScreen} />
     </Stack.Navigator>
   );
 }

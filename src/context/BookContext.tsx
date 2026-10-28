@@ -22,8 +22,8 @@ type BookContextValue = {
   addBook: (input: BookInput) => Promise<void>;
   updateBook: (id: string, input: BookInput) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
-  borrowBook: (id: string) => Promise<void>;
-  returnBook: (id: string) => Promise<void>;
+  borrowBook: (id: string, borrowerName: string) => Promise<void>;
+  returnBook: (id: string, loanId: string) => Promise<void>;
 };
 
 const BookContext = createContext<BookContextValue | undefined>(undefined);
@@ -108,7 +108,7 @@ export function BookProvider({children}: PropsWithChildren): React.JSX.Element {
           suffix += 1;
         }
         return {
-          books: [...currentBooks, {...input, id, borrowed: 0}],
+          books: [...currentBooks, {...input, id, borrowed: 0, loans: []}],
           result: undefined,
         };
       }),
@@ -156,7 +156,7 @@ export function BookProvider({children}: PropsWithChildren): React.JSX.Element {
   );
 
   const borrowBook = useCallback(
-    (id: string) =>
+    (id: string, borrowerName: string) =>
       mutate(currentBooks => {
         const book = currentBooks.find(item => item.id === id);
         if (!book) {
@@ -165,9 +165,24 @@ export function BookProvider({children}: PropsWithChildren): React.JSX.Element {
         if (book.borrowed >= book.quantity) {
           throw new Error('Sách đã hết, không thể cho mượn thêm.');
         }
+        const normalizedName = borrowerName.trim();
+        if (!normalizedName) {
+          throw new Error('Vui lòng nhập tên người mượn.');
+        }
+        let loanId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        while (currentBooks.some(item => item.loans.some(loan => loan.id === loanId))) {
+          loanId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        }
+        const loan = {
+          id: loanId,
+          borrowerName: normalizedName,
+          borrowedAt: new Date().toISOString().slice(0, 10),
+        };
         return {
           books: currentBooks.map(item =>
-            item.id === id ? {...item, borrowed: item.borrowed + 1} : item,
+            item.id === id
+              ? {...item, borrowed: item.borrowed + 1, loans: [...item.loans, loan]}
+              : item,
           ),
           result: undefined,
         };
@@ -176,7 +191,7 @@ export function BookProvider({children}: PropsWithChildren): React.JSX.Element {
   );
 
   const returnBook = useCallback(
-    (id: string) =>
+    (id: string, loanId: string) =>
       mutate(currentBooks => {
         const book = currentBooks.find(item => item.id === id);
         if (!book) {
@@ -185,9 +200,18 @@ export function BookProvider({children}: PropsWithChildren): React.JSX.Element {
         if (book.borrowed === 0) {
           throw new Error('Không có cuốn sách nào đang được mượn để nhận trả.');
         }
+        if (!book.loans.some(loan => loan.id === loanId)) {
+          throw new Error('Không tìm thấy giao dịch mượn cần nhận trả.');
+        }
         return {
           books: currentBooks.map(item =>
-            item.id === id ? {...item, borrowed: item.borrowed - 1} : item,
+            item.id === id
+              ? {
+                  ...item,
+                  borrowed: item.borrowed - 1,
+                  loans: item.loans.filter(loan => loan.id !== loanId),
+                }
+              : item,
           ),
           result: undefined,
         };
