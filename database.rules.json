@@ -1,0 +1,117 @@
+{
+  "rules": {
+    "users": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['uid', 'fullName', 'email', 'createdAt'])",
+        "uid": { ".validate": "newData.val() === $uid" },
+        "fullName": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 50" },
+        "email": { ".validate": "newData.isString() && newData.val().length <= 100" },
+        "avatar": { ".validate": "newData.isString() && newData.val().length <= 500" },
+        "isOnline": { ".validate": "newData.isBoolean()" },
+        "lastSeen": { ".validate": "newData.isNumber()" },
+        "createdAt": { ".validate": "newData.isNumber() && (!data.exists() || newData.val() === data.val())" },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "userStatus": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['state', 'lastChanged'])",
+        "state": { ".validate": "newData.val() === 'online' || newData.val() === 'offline'" },
+        "lastChanged": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "conversations": {
+      "$cid": {
+        ".read": "auth != null && ($cid.beginsWith(auth.uid + '_') || $cid.endsWith('_' + auth.uid))",
+        ".write": "auth != null && newData.exists() && ($cid.beginsWith(auth.uid + '_') || $cid.endsWith('_' + auth.uid))",
+        ".validate": "newData.hasChildren(['id', 'participants', 'updatedAt']) && newData.child('participants').child(auth.uid).val() === true",
+        "id": { ".validate": "newData.val() === $cid" },
+        "participants": {
+          "$p": { ".validate": "newData.val() === true && ($cid.beginsWith($p + '_') || $cid.endsWith('_' + $p))" }
+        },
+        "lastMessage": {
+          ".validate": "newData.hasChildren(['text', 'senderId', 'type', 'createdAt'])",
+          "text": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000" },
+          "senderId": { ".validate": "newData.val() === auth.uid" },
+          "type": { ".validate": "newData.val() === 'text' || newData.val() === 'location'" },
+          "createdAt": { ".validate": "newData.isNumber()" },
+          "$other": { ".validate": false }
+        },
+        "updatedAt": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "userConversations": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$cid": {
+          ".write": "auth != null && ($cid.beginsWith(auth.uid + '_') || $cid.endsWith('_' + auth.uid)) && ($cid.beginsWith($uid + '_') || $cid.endsWith('_' + $uid))",
+          ".validate": "newData.val() === true"
+        }
+      }
+    },
+
+    "messages": {
+      "$cid": {
+        ".read": "auth != null && ($cid.beginsWith(auth.uid + '_') || $cid.endsWith('_' + auth.uid))",
+        ".indexOn": ["createdAt"],
+        "$mid": {
+          ".write": "auth != null && !data.exists() && ($cid.beginsWith(auth.uid + '_') || $cid.endsWith('_' + auth.uid))",
+          ".validate": "newData.hasChildren(['id', 'senderId', 'receiverId', 'text', 'type', 'createdAt'])",
+          "id": { ".validate": "newData.val() === $mid" },
+          "senderId": { ".validate": "newData.val() === auth.uid" },
+          "receiverId": { ".validate": "newData.isString() && newData.val() !== auth.uid && ($cid.beginsWith(newData.val() + '_') || $cid.endsWith('_' + newData.val()))" },
+          "text": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000" },
+          "type": { ".validate": "newData.val() === 'text' || (newData.val() === 'location' && newData.parent().child('location').exists())" },
+          "createdAt": { ".validate": "newData.val() === now" },
+          "location": {
+            ".validate": "newData.hasChildren(['latitude', 'longitude'])",
+            "latitude": { ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90" },
+            "longitude": { ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180" },
+            "$other": { ".validate": false }
+          },
+          "$other": { ".validate": false }
+        }
+      }
+    },
+
+    "unreadCounts": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$cid": {
+          ".write": "auth != null && ($cid.beginsWith($uid + '_') || $cid.endsWith('_' + $uid)) && ((auth.uid === $uid && newData.val() === 0) || (auth.uid !== $uid && ($cid.beginsWith(auth.uid + '_') || $cid.endsWith('_' + auth.uid)) && ((!data.exists() && newData.val() === 1) || (data.exists() && newData.val() === data.val() + 1))))",
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+
+    "notifications": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".indexOn": ["createdAt"],
+        "$nid": {
+          ".write": "auth != null && (auth.uid === $uid || (!data.exists() && newData.child('fromUid').val() === auth.uid))",
+          ".validate": "newData.hasChildren(['id', 'type', 'title', 'body', 'read', 'createdAt', 'fromUid'])",
+          "id": { ".validate": "newData.val() === $nid" },
+          "type": { ".validate": "newData.val() === 'system' || newData.val() === 'new_conversation'" },
+          "title": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100" },
+          "body": { ".validate": "newData.isString() && newData.val().length <= 300" },
+          "read": { ".validate": "newData.isBoolean() && (!data.exists() || auth.uid === $uid)" },
+          "createdAt": { ".validate": "newData.isNumber()" },
+          "fromUid": { ".validate": "newData.isString() && (newData.val() === auth.uid || newData.val() === data.val())" },
+          "conversationId": { ".validate": "newData.isString()" },
+          "$other": { ".validate": false }
+        }
+      }
+    }
+  }
+}
+
