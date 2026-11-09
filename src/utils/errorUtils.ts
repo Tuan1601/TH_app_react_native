@@ -1,8 +1,4 @@
-/**
- * Chuyển lỗi Firebase (Auth + Realtime Database) thành thông báo tiếng Việt.
- * Các service dùng hàm này để luôn ném ra Error có message dễ hiểu,
- * nhờ vậy UI chỉ cần hiển thị error.message.
- */
+
 import { FirebaseError } from 'firebase/app';
 
 const AUTH_ERROR_MESSAGES: Record<string, string> = {
@@ -25,7 +21,7 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
     'Firebase API key không hợp lệ. Kiểm tra config.ts.',
 };
 
-/** Lấy message gốc từ một giá trị lỗi bất kỳ. */
+
 function getRawMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
@@ -33,11 +29,7 @@ function getRawMessage(error: unknown): string {
   return typeof error === 'string' ? error : '';
 }
 
-/**
- * Trả về thông báo tiếng Việt cho một lỗi bất kỳ.
- * @param error lỗi bắt được trong catch
- * @param fallback thông báo mặc định khi không nhận diện được lỗi
- */
+
 export function getErrorMessage(
   error: unknown,
   fallback = 'Đã xảy ra lỗi. Vui lòng thử lại.',
@@ -49,7 +41,6 @@ export function getErrorMessage(
   const raw = getRawMessage(error);
   const upper = raw.toUpperCase();
 
-  // Lỗi từ Realtime Database thường chỉ có message, không có code.
   if (upper.includes('PERMISSION_DENIED') || upper.includes('PERMISSION DENIED')) {
     return 'Bạn không có quyền thực hiện thao tác này (kiểm tra Database Rules).';
   }
@@ -57,16 +48,12 @@ export function getErrorMessage(
     return 'Mất kết nối tới máy chủ. Vui lòng kiểm tra Internet.';
   }
 
-  // Lỗi do chính service ném ra bằng tiếng Việt thì giữ nguyên.
   if (raw && !(error instanceof FirebaseError)) {
     return raw;
   }
   return fallback;
 }
 
-/**
- * Bọc lỗi thành Error có message tiếng Việt để service ném ra ngoài.
- */
 export function toAppError(error: unknown, fallback?: string): Error {
   return new Error(getErrorMessage(error, fallback));
 }

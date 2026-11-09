@@ -1,7 +1,4 @@
-/**
- * useContacts: lắng nghe realtime danh bạ người dùng từ /users
- * và hỗ trợ tìm kiếm theo họ tên hoặc email.
- */
+
 import { useEffect, useMemo, useState } from 'react';
 import { listenToUsers } from '../services/userService';
 import type { UserProfile } from '../types/user';

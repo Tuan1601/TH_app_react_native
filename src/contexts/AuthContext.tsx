@@ -1,7 +1,4 @@
-/**
- * AuthContext: quản lý phiên đăng nhập toàn ứng dụng bằng onAuthStateChanged()
- * và tự động bật/tắt hệ thống Presence (online/offline) khi trạng thái đăng nhập thay đổi.
- */
+
 import React, {
   createContext,
   useCallback,
@@ -60,7 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [initializing, setInitializing] = useState<boolean>(true);
   const [isConnected, setIsConnected] = useState<boolean>(true);
 
-  // 1. Theo dõi trạng thái xác thực Firebase Auth
+
   useEffect(() => {
     const unsubscribeAuth = observeAuthState(user => {
       setFirebaseUser(user);
@@ -76,7 +73,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, []);
 
-  // 2. Khi đã có firebaseUser, lắng nghe hồ sơ /users/{uid} và bật Presence System
   useEffect(() => {
     if (!firebaseUser) {
       return;

@@ -1,6 +1,4 @@
-/**
- * useAuth: custom hook lấy thông tin xác thực từ AuthContext.
- */
+
 import { useContext } from 'react';
 import { AuthContext, type AuthContextValue } from '../contexts/AuthContext';
 

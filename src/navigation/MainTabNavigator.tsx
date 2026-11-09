@@ -1,10 +1,4 @@
-/**
- * MainTabNavigator: 4 tab chính của ứng dụng sau khi đăng nhập:
- * - HomeScreen (Tin nhắn, có badge tổng số tin chưa đọc)
- * - ContactsScreen (Danh bạ)
- * - NotificationsScreen (Thông báo)
- * - SettingsScreen (Cài đặt)
- */
+
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';

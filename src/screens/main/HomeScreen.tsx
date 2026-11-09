@@ -1,9 +1,4 @@
-/**
- * HomeScreen: màn hình danh sách các cuộc trò chuyện realtime.
- * - Sắp xếp theo updatedAt giảm dần (mới nhất trên cùng).
- * - Hiển thị tin nhắn cuối, thời gian và badge số tin chưa đọc.
- * - Khi nhấn vào cuộc trò chuyện: đặt unreadCount về 0 và mở ChatScreen.
- */
+
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

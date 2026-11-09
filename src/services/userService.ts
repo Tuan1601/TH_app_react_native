@@ -1,6 +1,4 @@
-/**
- * userService: thao tác với hồ sơ người dùng tại /users/{uid}.
- */
+
 import {
   get,
   onValue,
@@ -15,13 +13,10 @@ import { APP_CONFIG } from '../constants/config';
 import { toAppError, getErrorMessage } from '../utils/errorUtils';
 import { db, DB_PATHS } from './firebase';
 
-/** Dữ liệu thô đọc từ database (có thể thiếu trường). */
+
 type RawUser = Partial<UserProfile> | null | undefined;
 
-/**
- * Chuyển dữ liệu thô từ Firebase thành UserProfile đầy đủ kiểu.
- * Trả về null nếu dữ liệu không hợp lệ (thiếu fullName).
- */
+
 export function toUserProfile(uid: string, raw: RawUser): UserProfile | null {
   if (!raw || typeof raw.fullName !== 'string') {
     return null;
@@ -44,11 +39,7 @@ export interface CreateUserProfileParams {
   avatar?: string;
 }
 
-/**
- * Tạo hồ sơ người dùng mới tại /users/{uid} ngay sau khi đăng ký.
- * Thời gian dùng serverTimestamp() để đồng nhất giữa các máy.
- * Không lưu mật khẩu, vì Firebase Authentication đã quản lý mật khẩu.
- */
+
 export async function createUserProfile(
   params: CreateUserProfileParams,
 ): Promise<UserProfile> {
@@ -72,10 +63,7 @@ export async function createUserProfile(
   }
 }
 
-/**
- * Đọc hồ sơ một người dùng (đọc một lần, không realtime).
- * @returns UserProfile hoặc null nếu chưa có hồ sơ.
- */
+
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
   try {
     const snapshot = await get(ref(db, DB_PATHS.user(uid)));
@@ -85,11 +73,7 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
   }
 }
 
-/**
- * Lắng nghe realtime danh sách tất cả người dùng (trừ tài khoản hiện tại).
- * Tự cập nhật khi có người đăng ký mới hoặc đổi trạng thái online.
- * @returns hàm unsubscribe, BẮT BUỘC gọi trong cleanup của useEffect.
- */
+
 export function listenToUsers(
   currentUid: string,
   onData: (users: UserProfile[]) => void,
@@ -110,10 +94,6 @@ export function listenToUsers(
   );
 }
 
-/**
- * Lắng nghe realtime hồ sơ của MỘT người dùng (dùng cho AuthContext, Settings).
- * @returns hàm unsubscribe.
- */
 export function listenToUserProfile(
   uid: string,
   onData: (profile: UserProfile | null) => void,
@@ -126,10 +106,7 @@ export function listenToUserProfile(
   );
 }
 
-/**
- * Cập nhật hồ sơ của chính mình (họ tên, avatar).
- * Security Rules chỉ cho phép sửa /users/{uid} khi uid === auth.uid.
- */
+
 export async function updateUserProfile(
   uid: string,
   payload: UpdateProfilePayload,

@@ -1,6 +1,4 @@
-/**
- * AppHeader: thanh tiêu đề đồng nhất trên các màn hình của ứng dụng.
- */
+
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';

@@ -1,16 +1,10 @@
-/**
- * locationService: xin quyền vị trí trên Android, lấy tọa độ GPS hiện tại
- * bằng @react-native-community/geolocation và mở Google Maps.
- */
+
 import Geolocation from '@react-native-community/geolocation';
 import { Linking, PermissionsAndroid, Platform } from 'react-native';
 import { APP_CONFIG } from '../constants/config';
 import type { LocationCoords } from '../types/message';
 
-/**
- * Xin quyền truy cập vị trí trên Android (ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION).
- * @returns true nếu người dùng đã cấp quyền.
- */
+
 export async function requestLocationPermission(): Promise<boolean> {
   if (Platform.OS !== 'android') {
     return true;
@@ -42,7 +36,7 @@ export async function requestLocationPermission(): Promise<boolean> {
   }
 }
 
-/** Gọi Geolocation.getCurrentPosition gói trong Promise. */
+
 function fetchPosition(enableHighAccuracy: boolean): Promise<LocationCoords> {
   return new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(
@@ -64,11 +58,6 @@ function fetchPosition(enableHighAccuracy: boolean): Promise<LocationCoords> {
   });
 }
 
-/**
- * Lấy tọa độ GPS hiện tại của thiết bị.
- * Tự động xin quyền nếu chưa có. Thử độ chính xác cao trước, nếu timeout trên máy ảo
- * thì fallback sang độ chính xác mạng/coarse.
- */
 export async function getCurrentLocation(): Promise<LocationCoords> {
   const granted = await requestLocationPermission();
   if (!granted) {
@@ -102,10 +91,7 @@ export async function getCurrentLocation(): Promise<LocationCoords> {
   }
 }
 
-/**
- * Mở tọa độ trong Google Maps hoặc trình duyệt theo đúng URL yêu cầu:
- * https://www.google.com/maps/search/?api=1&query=LATITUDE,LONGITUDE
- */
+
 export async function openLocationInMaps(
   coords: LocationCoords,
 ): Promise<void> {

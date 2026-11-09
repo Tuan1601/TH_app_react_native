@@ -1,9 +1,4 @@
-/**
- * RootNavigator: tự động chuyển đổi giữa AuthNavigator và AppStack (MainTabNavigator + ChatScreen)
- * dựa trên trạng thái đăng nhập từ onAuthStateChanged().
- * Khi đăng xuất, AuthNavigator thay thế hoàn toàn AppStack nên người dùng không thể
- * nhấn nút Back Android để quay lại màn hình đã đăng nhập (TEST 17).
- */
+
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

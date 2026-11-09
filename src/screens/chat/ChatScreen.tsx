@@ -1,9 +1,4 @@
-/**
- * ChatScreen: màn hình Chat 1-1 Realtime.
- * - Header: nút quay lại, Avatar + Họ tên đối phương + Trạng thái Online/Offline realtime.
- * - FlatList tin nhắn: phân nhóm theo ngày (Hôm nay / Hôm qua / dd/MM/yyyy), tự cuộn xuống cuối.
- * - Thanh nhập: TextInput + nút gửi vị trí hiện tại (có loading) + nút gửi văn bản.
- */
+
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -70,7 +65,6 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
       ? formatLastSeen(partnerStatus.lastChanged)
       : 'Offline';
 
-  // Tự động cuộn xuống tin nhắn mới nhất khi có tin nhắn mới
   useEffect(() => {
     if (messages.length > 0) {
       const timer = setTimeout(() => {
@@ -123,7 +117,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-      {/* Header ChatScreen */}
+
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -171,7 +165,6 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 8 : 0}>
-        {/* Danh sách tin nhắn */}
         {loading ? (
           <Loading message="Đang tải tin nhắn..." />
         ) : error ? (
@@ -217,7 +210,6 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
           />
         )}
 
-        {/* Thanh nhập tin nhắn */}
         <View style={styles.inputBar}>
           <TouchableOpacity
             style={styles.locationButton}

@@ -1,6 +1,4 @@
-/**
- * OnlineIndicator: chấm tròn hiển thị trạng thái Online (xanh lá) / Offline (xám).
- */
+
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import colors from '../constants/colors';

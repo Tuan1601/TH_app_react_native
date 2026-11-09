@@ -1,7 +1,4 @@
-/**
- * LoginScreen: màn hình Đăng nhập tài khoản bằng Email & Mật khẩu.
- * Hiển thị thông báo lỗi tiếng Việt dễ hiểu, không làm ứng dụng crash.
- */
+
 import React, { useState } from 'react';
 import {
   ActivityIndicator,

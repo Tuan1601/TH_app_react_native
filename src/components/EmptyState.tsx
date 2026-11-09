@@ -1,6 +1,4 @@
-/**
- * EmptyState: hiển thị khi danh sách trống hoặc có lỗi xảy ra.
- */
+
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';

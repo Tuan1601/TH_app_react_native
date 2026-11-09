@@ -1,7 +1,4 @@
-/**
- * SettingsScreen: hiển thị thông tin tài khoản hiện tại, trạng thái kết nối
- * và nút Đăng xuất có hộp thoại xác nhận trước khi thực hiện.
- */
+
 import React, { useState } from 'react';
 import {
   ActivityIndicator,

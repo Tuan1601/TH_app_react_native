@@ -1,7 +1,4 @@
-/**
- * App.tsx: Điểm khởi chạy gốc của ứng dụng Chat 1-1 Realtime.
- * Bọc SafeAreaProvider, StatusBar, AuthProvider và RootNavigator.
- */
+
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

@@ -1,7 +1,4 @@
-/**
- * ConversationItem: một cuộc trò chuyện trên màn hình HomeScreen.
- * Hiển thị avatar, họ tên đối phương, tin nhắn cuối, thời gian gửi và badge số tin chưa đọc.
- */
+
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import colors from '../constants/colors';

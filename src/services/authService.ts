@@ -1,7 +1,4 @@
-/**
- * authService: đăng ký, đăng nhập, đăng xuất bằng Firebase Authentication.
- * Mật khẩu chỉ được gửi tới Firebase Auth, KHÔNG BAO GIỜ lưu vào Database.
- */
+
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -36,14 +33,7 @@ function buildFallbackProfile(user: User, fullNameOverride?: string): UserProfil
   };
 }
 
-/**
- * Đăng ký tài khoản mới.
- * 1. createUserWithEmailAndPassword() → Firebase Auth tạo tài khoản, trả về UID.
- * 2. Lưu displayName vào Auth.
- * 3. Tạo hồ sơ /users/{uid}.
- * Lưu ý: KHÔNG gọi deleteUser() nếu bước 3 bị lỗi Rules để tránh làm văng
- * người dùng ngược ra màn hình Login sau khi onAuthStateChanged đã kích hoạt.
- */
+
 export async function registerUser(
   payload: RegisterPayload,
 ): Promise<UserProfile> {
@@ -78,10 +68,6 @@ export async function registerUser(
   }
 }
 
-/**
- * Đăng nhập bằng email/mật khẩu, sau đó lấy hồ sơ từ Realtime Database.
- * Nếu tài khoản cũ chưa có hồ sơ thì tạo bù để app không bị lỗi.
- */
 export async function loginUser(payload: LoginPayload): Promise<UserProfile> {
   let user: User;
   try {
@@ -111,10 +97,7 @@ export async function loginUser(payload: LoginPayload): Promise<UserProfile> {
   }
 }
 
-/**
- * Đăng xuất: ghi offline TRƯỚC, sau đó mới signOut().
- * Phải theo thứ tự này vì sau signOut không còn quyền ghi vào /userStatus.
- */
+
 export async function logoutUser(uid: string): Promise<void> {
   try {
     await updateOfflineStatus(uid);
@@ -128,9 +111,7 @@ export async function logoutUser(uid: string): Promise<void> {
   }
 }
 
-/**
- * Theo dõi trạng thái đăng nhập toàn app (onAuthStateChanged).
- */
+
 export function observeAuthState(
   callback: (user: User | null) => void,
 ): Unsubscribe {

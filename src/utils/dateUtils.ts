@@ -1,6 +1,3 @@
-/**
- * Các hàm định dạng ngày giờ cho tin nhắn, cuộc trò chuyện và trạng thái hoạt động.
- */
 
 function pad2(n: number): string {
   return n < 10 ? `0${n}` : `${n}`;
@@ -14,7 +11,6 @@ function isSameDay(a: Date, b: Date): boolean {
   );
 }
 
-/** Định dạng giờ gửi dưới mỗi bong bóng tin nhắn: "14:05". */
 export function formatMessageTime(timestamp: number): string {
   if (!timestamp || timestamp <= 0) {
     return '';
@@ -23,12 +19,7 @@ export function formatMessageTime(timestamp: number): string {
   return `${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
 }
 
-/**
- * Nhãn phân nhóm ngày trong ChatScreen:
- * - "Hôm nay"
- * - "Hôm qua"
- * - "dd/MM/yyyy"
- */
+
 export function formatDateHeader(timestamp: number): string {
   if (!timestamp || timestamp <= 0) {
     return 'Hôm nay';
@@ -46,7 +37,6 @@ export function formatDateHeader(timestamp: number): string {
   return `${pad2(date.getDate())}/${pad2(date.getMonth() + 1)}/${date.getFullYear()}`;
 }
 
-/** Khóa ngày dạng YYYY-MM-DD để kiểm tra hai tin nhắn có khác ngày không. */
 export function getDateKey(timestamp: number): string {
   if (!timestamp || timestamp <= 0) {
     return 'unknown';
@@ -55,13 +45,7 @@ export function getDateKey(timestamp: number): string {
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
 }
 
-/**
- * Định dạng thời gian tin nhắn cuối trên HomeScreen:
- * - Trong ngày hôm nay: "HH:mm"
- * - Hôm qua: "Hôm qua"
- * - Trong cùng năm: "dd/MM"
- * - Khác năm: "dd/MM/yyyy"
- */
+
 export function formatConversationTime(timestamp: number): string {
   if (!timestamp || timestamp <= 0) {
     return '';
@@ -82,13 +66,7 @@ export function formatConversationTime(timestamp: number): string {
   return `${pad2(date.getDate())}/${pad2(date.getMonth() + 1)}/${date.getFullYear()}`;
 }
 
-/**
- * Định dạng trạng thái hoạt động gần nhất khi người dùng offline:
- * - "Offline • vừa xong"
- * - "Offline • 5 phút trước"
- * - "Offline • 2 giờ trước"
- * - "Offline • dd/MM HH:mm"
- */
+
 export function formatLastSeen(lastSeen?: number): string {
   if (!lastSeen || lastSeen <= 0) {
     return 'Offline';

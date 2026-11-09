@@ -1,7 +1,4 @@
-/**
- * notificationService: đọc và cập nhật thông báo tại /notifications/{uid}.
- * Phục vụ màn hình NotificationsScreen (giữ lại tab Thông báo từ Bài thực hành 4).
- */
+
 import {
   limitToLast,
   onValue,
@@ -46,9 +43,7 @@ function parseNotification(
   };
 }
 
-/**
- * Lắng nghe realtime danh sách thông báo của người dùng hiện tại.
- */
+
 export function listenToNotifications(
   uid: string,
   onData: (items: AppNotification[]) => void,
@@ -82,9 +77,7 @@ export function listenToNotifications(
   );
 }
 
-/**
- * Tạo thông báo chào mừng khi người dùng vừa đăng ký tài khoản mới.
- */
+
 export async function createWelcomeNotification(
   uid: string,
   fullName: string,
@@ -105,13 +98,11 @@ export async function createWelcomeNotification(
       fromUid: uid,
     });
   } catch {
-    // Không làm gián đoạn luồng đăng ký nếu ghi thông báo lỗi
+
   }
 }
 
-/**
- * Đánh dấu một thông báo là đã đọc.
- */
+
 export async function markNotificationAsRead(
   uid: string,
   notificationId: string,

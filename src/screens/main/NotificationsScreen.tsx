@@ -1,7 +1,4 @@
-/**
- * NotificationsScreen: màn hình Thông báo tích hợp trong MainTabNavigator.
- * Đọc dữ liệu realtime từ /notifications/{uid}, hiển thị Empty State khi chưa có thông báo.
- */
+
 import React, { useEffect, useState } from 'react';
 import {
   FlatList,

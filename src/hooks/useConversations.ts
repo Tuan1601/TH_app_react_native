@@ -1,7 +1,4 @@
-/**
- * useConversations: lắng nghe realtime danh sách cuộc trò chuyện, số tin chưa đọc
- * và thông tin đối phương để hiển thị trên HomeScreen.
- */
+
 import { useEffect, useMemo, useState } from 'react';
 import {
   listenToConversations,

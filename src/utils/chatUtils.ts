@@ -1,13 +1,7 @@
-/**
- * Các hàm tiện ích xử lý cuộc trò chuyện, tin nhắn và hiển thị tên/avatar.
- */
+
 import type { LastMessage } from '../types/conversation';
 
-/**
- * Tạo ID cuộc trò chuyện thống nhất từ hai UID.
- * Sắp xếp hai UID theo thứ tự alphabet rồi nối bằng dấu gạch dưới.
- * Đảm bảo createConversationId(A, B) === createConversationId(B, A).
- */
+
 export function createConversationId(uid1: string, uid2: string): string {
   const a = uid1.trim();
   const b = uid2.trim();
@@ -17,9 +11,7 @@ export function createConversationId(uid1: string, uid2: string): string {
   return [a, b].sort().join('_');
 }
 
-/**
- * Lấy UID của người đối diện từ conversationId hoặc map participants.
- */
+
 export function extractPartnerId(
   conversationId: string,
   currentUid: string,
@@ -35,11 +27,6 @@ export function extractPartnerId(
   return parts[0] === currentUid ? parts[1] ?? '' : parts[0] ?? '';
 }
 
-/**
- * Định dạng nội dung tin nhắn cuối trên HomeScreen.
- * - Nếu tin nhắn vị trí -> "📍 Đã gửi vị trí"
- * - Nếu do tôi gửi -> thêm tiền tố "Bạn: "
- */
 export function formatLastMessagePreview(
   lastMessage: LastMessage | null | undefined,
   currentUid: string,
@@ -57,10 +44,7 @@ export function formatLastMessagePreview(
   return content;
 }
 
-/**
- * Lấy tối đa 2 chữ cái đầu của họ tên để hiển thị trên Avatar khi chưa có ảnh.
- * Ví dụ: "Nguyen Van A" -> "NA"
- */
+
 export function getInitials(fullName: string): string {
   const cleaned = fullName.trim();
   if (!cleaned) {

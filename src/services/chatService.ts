@@ -1,8 +1,4 @@
-/**
- * chatService: toàn bộ nghiệp vụ Chat 1-1 Realtime với Firebase Realtime Database.
- * Bao gồm: tạo/lấy cuộc trò chuyện, gửi tin nhắn văn bản & vị trí bằng multi-path update,
- * lắng nghe danh sách tin nhắn, lắng nghe cuộc trò chuyện, và quản lý số tin chưa đọc.
- */
+
 import {
   get,
   increment,
@@ -28,14 +24,12 @@ import { createConversationId as buildConversationId } from '../utils/chatUtils'
 import { getErrorMessage, toAppError } from '../utils/errorUtils';
 import { db, DB_PATHS } from './firebase';
 
-/**
- * Tạo ID cuộc trò chuyện thống nhất từ hai UID (sắp xếp alphabet, nối bằng '_').
- */
+
 export function createConversationId(uid1: string, uid2: string): string {
   return buildConversationId(uid1, uid2);
 }
 
-/** Chuyển dữ liệu thô từ Firebase thành đối tượng Conversation hợp lệ. */
+
 function parseConversation(
   id: string,
   raw: Record<string, unknown> | null | undefined,
@@ -76,7 +70,7 @@ function parseConversation(
   };
 }
 
-/** Chuyển dữ liệu thô từ Firebase thành đối tượng Message hợp lệ. */
+
 function parseMessage(
   id: string,
   raw: Record<string, unknown> | null | undefined,
@@ -111,10 +105,6 @@ function parseMessage(
   };
 }
 
-/**
- * Lấy hoặc khởi tạo cuộc trò chuyện giữa 2 người dùng.
- * Không ghi đè lastMessage nếu cuộc trò chuyện đã tồn tại.
- */
 export async function getOrCreateConversation(
   uid1: string,
   uid2: string,
@@ -162,15 +152,7 @@ export interface SendTextMessageParams {
   text: string;
 }
 
-/**
- * Gửi tin nhắn văn bản bằng update() đa đường dẫn:
- * - Tạo message ID duy nhất bằng push()
- * - Lưu message tại /messages/{cid}/{mid}
- * - Cập nhật /conversations/{cid} (id, participants, lastMessage, updatedAt)
- * - Đảm bảo chỉ mục /userConversations cho cả 2 phía
- * - Tăng unreadCount cho người nhận bằng increment(1) nguyên tử trên server
- * - Không tăng unreadCount của người gửi
- */
+
 export async function sendTextMessage(
   params: SendTextMessageParams,
 ): Promise<string> {
@@ -236,9 +218,7 @@ export interface SendLocationMessageParams {
   location: LocationCoords;
 }
 
-/**
- * Gửi tin nhắn vị trí hiện tại bằng update() đa đường dẫn.
- */
+
 export async function sendLocationMessage(
   params: SendLocationMessageParams,
 ): Promise<string> {
@@ -300,11 +280,7 @@ export async function sendLocationMessage(
   }
 }
 
-/**
- * Lắng nghe realtime danh sách tin nhắn của một cuộc trò chuyện.
- * Sắp xếp tăng dần theo createdAt và loại bỏ trùng lặp theo id.
- * @returns hàm unsubscribe để gọi trong cleanup của useEffect.
- */
+
 export function listenToMessages(
   conversationId: string,
   onData: (messages: Message[]) => void,
@@ -342,12 +318,7 @@ export function listenToMessages(
   );
 }
 
-/**
- * Lắng nghe realtime danh sách các cuộc trò chuyện mà uid tham gia.
- * Kết hợp chỉ mục /userConversations/{uid} và listener trên từng /conversations/{cid},
- * tự động dọn dẹp mọi sub-listener khi danh sách thay đổi hoặc khi unsubscribe.
- * Chỉ trả về các cuộc trò chuyện đã có tin nhắn hoặc đã khởi tạo, sắp xếp giảm dần theo updatedAt.
- */
+
 export function listenToConversations(
   uid: string,
   onData: (conversations: Conversation[]) => void,
@@ -379,7 +350,7 @@ export function listenToConversations(
         Object.keys(rawIndex).filter(cid => rawIndex[cid] === true),
       );
 
-      // Hủy listener của những conversation không còn trong index
+
       convListeners.forEach((unsub, cid) => {
         if (!activeIds.has(cid)) {
           unsub();
@@ -393,7 +364,7 @@ export function listenToConversations(
         return;
       }
 
-      // Đăng ký listener cho các conversation mới
+
       activeIds.forEach(cid => {
         if (convListeners.has(cid)) {
           return;
@@ -436,9 +407,7 @@ export function listenToConversations(
   };
 }
 
-/**
- * Lắng nghe realtime bản đồ số tin nhắn chưa đọc tại /unreadCounts/{uid}.
- */
+
 export function listenToUnreadCounts(
   uid: string,
   onData: (counts: UnreadCountMap) => void,
@@ -464,11 +433,7 @@ export function listenToUnreadCounts(
   );
 }
 
-/**
- * Tăng số tin nhắn chưa đọc của người nhận lên 1 đơn vị.
- * Sử dụng ServerValue.increment(1) nguyên tử trên server để tránh mất dữ liệu
- * khi nhiều tin nhắn đến đồng thời và tuân thủ Security Rules (người gửi không cần quyền đọc unread của người nhận).
- */
+
 export async function incrementUnreadCount(
   receiverId: string,
   conversationId: string,
@@ -483,9 +448,8 @@ export async function incrementUnreadCount(
   }
 }
 
-/**
- * Đặt lại số tin nhắn chưa đọc của tài khoản hiện tại trong một cuộc trò chuyện về 0.
- */
+
+
 export async function resetUnreadCount(
   uid: string,
   conversationId: string,

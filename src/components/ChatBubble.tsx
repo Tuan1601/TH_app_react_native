@@ -1,9 +1,4 @@
-/**
- * ChatBubble: bong bóng tin nhắn trong ChatScreen.
- * - Tin nhắn của tôi: nằm bên phải, nền xanh #2878F0, chữ trắng.
- * - Tin nhắn người khác: nằm bên trái, nền trắng, chữ tối #172033.
- * - Tin nhắn vị trí: có icon bản đồ, hiển thị "Đã gửi vị trí", tọa độ và nút mở Google Maps.
- */
+
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';

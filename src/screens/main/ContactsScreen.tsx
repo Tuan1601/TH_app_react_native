@@ -1,9 +1,4 @@
-/**
- * ContactsScreen: hiển thị danh sách tất cả người dùng đã đăng ký (trừ tài khoản hiện tại).
- * - Có ô tìm kiếm theo tên hoặc email.
- * - Cập nhật realtime khi có người đăng ký mới hoặc đổi trạng thái online/offline.
- * - Khi nhấn vào một người: tạo hoặc lấy conversationId rồi mở ChatScreen.
- */
+
 import React from 'react';
 import {
   FlatList,
@@ -47,7 +42,6 @@ export const ContactsScreen: React.FC<MainTabScreenProps<'Contacts'>> = ({
       return;
     }
     const conversationId = createConversationId(currentUid, partner.uid);
-    // Đảm bảo node conversation được khởi tạo trên Firebase
     getOrCreateConversation(currentUid, partner.uid).catch(() => undefined);
 
     navigation.navigate('Chat', {

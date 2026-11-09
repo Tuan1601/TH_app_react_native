@@ -1,6 +1,4 @@
-/**
- * Các hàm kiểm tra dữ liệu form. Không phụ thuộc Firebase hay UI.
- */
+
 import { APP_CONFIG } from '../constants/config';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -17,10 +15,8 @@ export interface LoginFormValues {
   password: string;
 }
 
-/** Mỗi trường có thể có một thông báo lỗi; không có lỗi thì không có key. */
 export type FormErrors<T> = Partial<Record<keyof T, string>>;
 
-/** Chuẩn hóa email: bỏ khoảng trắng, chuyển chữ thường. */
 export function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
@@ -29,7 +25,6 @@ export function isValidEmail(email: string): boolean {
   return EMAIL_REGEX.test(normalizeEmail(email));
 }
 
-/** Kiểm tra form đăng ký. Trả về object rỗng nếu hợp lệ. */
 export function validateRegisterForm(
   values: RegisterFormValues,
 ): FormErrors<RegisterFormValues> {
@@ -63,7 +58,6 @@ export function validateRegisterForm(
   return errors;
 }
 
-/** Kiểm tra form đăng nhập. Trả về object rỗng nếu hợp lệ. */
 export function validateLoginForm(
   values: LoginFormValues,
 ): FormErrors<LoginFormValues> {
@@ -82,7 +76,6 @@ export function validateLoginForm(
   return errors;
 }
 
-/** true nếu object lỗi không có trường nào. */
 export function hasErrors<T>(errors: FormErrors<T>): boolean {
   return Object.keys(errors).length > 0;
 }

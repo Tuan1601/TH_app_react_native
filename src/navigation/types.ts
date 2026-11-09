@@ -1,6 +1,4 @@
-/**
- * Khai báo đầy đủ TypeScript types cho toàn bộ hệ thống React Navigation.
- */
+
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type {
   CompositeScreenProps,

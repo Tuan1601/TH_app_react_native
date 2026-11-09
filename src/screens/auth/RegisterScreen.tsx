@@ -1,7 +1,4 @@
-/**
- * RegisterScreen: màn hình Đăng ký tài khoản mới.
- * Kiểm tra đầy đủ họ tên, email, mật khẩu >= 6 ký tự và mật khẩu nhập lại khớp nhau.
- */
+
 import React, { useState } from 'react';
 import {
   ActivityIndicator,

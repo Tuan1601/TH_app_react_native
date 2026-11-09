@@ -1,6 +1,4 @@
-/**
- * AuthNavigator: điều hướng dành cho người dùng chưa đăng nhập (Login / Register).
- */
+
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/auth/LoginScreen';

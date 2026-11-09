@@ -1,10 +1,4 @@
-/**
- * Khởi tạo Firebase dùng chung cho toàn app.
- *
- * Lưu ý với @react-native-async-storage/async-storage v3 và @firebase/auth:
- * - Theo tài liệu trong @firebase/auth/dist/rn/index.js, với AsyncStorage v3
- *   ta dùng createAsyncStorage('chatapp-auth') truyền vào getReactNativePersistence().
- */
+
 import { createAsyncStorage } from '@react-native-async-storage/async-storage';
 import { getApp, getApps, initializeApp, type FirebaseApp } from 'firebase/app';
 import {
@@ -47,10 +41,7 @@ export const db: Database = getDatabase(
   FIREBASE_CONFIG.databaseURL,
 );
 
-/**
- * Tập trung toàn bộ đường dẫn database vào một chỗ để tránh gõ sai chuỗi
- * và không lặp code giữa các service.
- */
+
 export const DB_PATHS = {
   connected: '.info/connected',
   users: 'users',

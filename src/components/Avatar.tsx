@@ -1,7 +1,4 @@
-/**
- * Avatar: hiển thị ảnh đại diện hoặc chữ cái đầu của họ tên,
- * kèm tùy chọn hiển thị chấm trạng thái Online ở góc dưới phải.
- */
+
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import colors from '../constants/colors';

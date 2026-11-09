@@ -1,7 +1,4 @@
-/**
- * Bảng màu dùng chung cho toàn ứng dụng.
- * Mọi màn hình phải lấy màu từ đây để giao diện đồng nhất.
- */
+
 const colors = {
   primary: '#2878F0',
   primaryDark: '#1F5FC2',

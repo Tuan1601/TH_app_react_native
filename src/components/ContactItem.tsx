@@ -1,7 +1,4 @@
-/**
- * ContactItem: một người dùng trong màn hình Danh bạ (ContactsScreen).
- * Hiển thị avatar, họ tên, email, chấm xanh khi online hoặc thời gian hoạt động gần nhất.
- */
+
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';

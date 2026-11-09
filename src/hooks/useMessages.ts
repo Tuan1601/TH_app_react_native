@@ -1,8 +1,4 @@
-/**
- * useMessages: lắng nghe realtime tin nhắn của một cuộc trò chuyện,
- * trạng thái online/offline realtime của đối phương, và tự động reset unreadCount
- * về 0 khi người dùng đang mở màn hình chat này.
- */
+
 import { useCallback, useEffect, useState } from 'react';
 import {
   listenToMessages,
@@ -44,8 +40,7 @@ export function useMessages({
   const [sendingLocation, setSendingLocation] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 1. Khi mở ChatScreen: đặt unreadCount của cuộc trò chuyện này về 0
-  // và lắng nghe danh sách tin nhắn realtime.
+
   useEffect(() => {
     if (!conversationId || !currentUid) {
       setMessages([]);
@@ -69,8 +64,6 @@ export function useMessages({
         setLoading(false);
         setError(null);
 
-        // Nếu có tin nhắn mới nhất do đối phương gửi trong lúc đang mở màn hình chat,
-        // đảm bảo unreadCount của tài khoản hiện tại luôn được giữ ở 0.
         const latest = nextMessages[nextMessages.length - 1];
         if (latest && latest.receiverId === currentUid) {
           resetUnreadCount(currentUid, conversationId).catch(() => undefined);
@@ -91,7 +84,6 @@ export function useMessages({
     };
   }, [conversationId, currentUid]);
 
-  // 2. Lắng nghe trạng thái online/offline realtime của người đang chat
   useEffect(() => {
     if (!partnerId) {
       setPartnerStatus(null);
